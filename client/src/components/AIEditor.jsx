@@ -14,25 +14,32 @@ const AIEditor = () => {
   const [selectedFile, setSelectedFile] = useState(null); // For image upload
   const [imagePreview, setImagePreview] = useState(null); // For image preview
   const [isEditable, setIsEditable] = useState(false); // Track if blog is being edited
-
+  const [summary, setSummary] = useState("");
+  const [isSummarizing, setIsSummarizing] = useState(false);
+  const [summaryError, setSummaryError] = useState("");
   const navigate = useNavigate();
 
   // Helper function to trim the last incomplete sentence
   const trimIncompleteSentence = (text) => {
-    const sentenceEndings = ['.', '!', '?']; // Common sentence end characters
+    const sentenceEndings = [".", "!", "?"];
     let trimmedText = text.trim();
-
-    // Check if the text ends with an incomplete sentence
+  
+    // Only trim if the last character isn't a valid sentence-ending punctuation
     if (!sentenceEndings.some((char) => trimmedText.endsWith(char))) {
-      const lastPeriodIndex = trimmedText.lastIndexOf('.');
-      if (lastPeriodIndex !== -1) {
-        trimmedText = trimmedText.slice(0, lastPeriodIndex); // Trim everything after the last period
+      // Find the last full sentence by looking for the last period, exclamation mark, or question mark
+      const lastSentenceEnd = Math.max(
+        trimmedText.lastIndexOf("."),
+        trimmedText.lastIndexOf("!"),
+        trimmedText.lastIndexOf("?")
+      );
+  
+      if (lastSentenceEnd !== -1) {
+        trimmedText = trimmedText.slice(0, lastSentenceEnd + 1); // Keep the sentence-ending punctuation
       }
     }
-
+  
     return trimmedText;
   };
-
   // Generate the blog post
   const handleGenerateBlog = async (e) => {
     e.preventDefault();
@@ -78,6 +85,34 @@ const AIEditor = () => {
       setError("Error generating blog. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  };
+  // Summarize the blog post
+  const handleSummarize = async () => {
+    if (!generatedBlog) {
+      setSummaryError("Please generate content before summarizing.");
+      return;
+    }
+
+    setIsSummarizing(true);
+    setSummaryError("");
+
+    try {
+      const response = await axios.post("http://localhost:8501/summarize", {
+        content: generatedBlog,
+        max_length: 150, // Max number of words in the summary
+        min_length: 100,  // Min number of words in the summary
+      });
+
+      if (response.data && response.data.summary) {
+        setSummary(response.data.summary);  // Update the summary state with the response
+      } else {
+        setSummaryError("Failed to summarize content. Please try again.");
+      }
+    } catch (error) {
+      setSummaryError("Error connecting to summarization service.");
+    } finally {
+      setIsSummarizing(false);
     }
   };
 
@@ -215,6 +250,13 @@ const AIEditor = () => {
             >
               <option value="Researchers">Researchers</option>
               <option value="Data Scientists">Data Scientists</option>
+              <option value="Business Executives">Business Executives</option>
+              <option value="Students">Students</option>
+              <option value="Tech Enthusiasts">Tech Enthusiasts</option>
+              <option value="Entrepreneurs">Entrepreneurs</option>
+              <option value="Healthcare Professionals">Healthcare Professionals</option>
+              <option value="Marketers">Marketers</option>
+              <option value="Educators">Educators</option> 
               <option value="Common Audience">Common Audience</option>
             </select>
           </div>
@@ -250,35 +292,62 @@ const AIEditor = () => {
         {error && <div className="alert alert-danger mt-3" role="alert">{error}</div>}
 
         {generatedBlog && (
-          <div className="mt-4">
-            <h5>Generated Blog:</h5>
-            <textarea
-              className="form-control w-75"
-              value={generatedBlog}
-              onChange={(e) => setGeneratedBlog(e.target.value)}
-              rows="12"
-              disabled={!isEditable}
-            />
-            <div className="mt-2">
-              {isEditable ? (
-                <button className="btn edit-btn" onClick={handleSaveBlog}>Save</button>
-              ) : (
-                <button className="btn edit-btn" onClick={handleEditBlog}>Edit</button>
-              )}
-              <button className="btn delete-btn" onClick={handleDeleteBlog}>Clear</button>
-            </div>
-          </div>
-        )}
-
         <div className="mt-4">
+          <h5>Generated Blog:</h5>
+          <textarea
+            className="form-control w-75"
+            value={generatedBlog}
+            onChange={(e) => setGeneratedBlog(e.target.value)}
+            rows="12"
+            disabled={!isEditable}
+          />
+          <div className="mt-2">
+            {isEditable ? (
+              <button className="btn edit-btn" onClick={handleSaveBlog}>
+                Save
+              </button>
+            ) : (
+              <button className="btn edit-btn" onClick={handleEditBlog}>
+                Edit
+              </button>
+            )}
+            <button className="btn delete-btn" onClick={handleDeleteBlog}>
+              Clear
+            </button>
+          </div>
+
           <button
-            className="btn submit-btn w-auto mb-5"
-            onClick={handleAddPost}
+            className="btn btn-primary w-auto mt-4"
+            onClick={handleSummarize}
+            disabled={isSummarizing}
           >
-            Add Post
+            {isSummarizing ? "Summarizing..." : "Summarize"}
           </button>
+
+          {summary && (
+            <div className="mt-4">
+              <h5>Summarized Content:</h5>
+              <textarea
+                className="form-control w-75"
+                value={summary}
+                rows="6"
+                readOnly
+              />
+            </div>
+          )}
+
+          {summaryError && (
+            <div className="alert alert-danger mt-3" role="alert">
+              {summaryError}
+            </div>
+          )}
         </div>
-      </div>
+      )}
+
+      <button className="btn submit-btn w-auto mt-4 mb-4" onClick={handleAddPost}>
+        Add Post
+      </button>
+    </div>
   );
 };
 

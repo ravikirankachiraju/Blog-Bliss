@@ -1,10 +1,9 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
 import requests
-
 from dotenv import load_dotenv
 import os
+from transformers import pipeline
 
 # Load the .env file from the server folder
 load_dotenv(dotenv_path='server/.env')  # Adjust the path as needed
@@ -13,6 +12,7 @@ app = Flask(__name__)
 
 # Enable CORS for all routes
 CORS(app)
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 # Hugging Face API Key and URL
 hugging_face_api_key= os.getenv('HUGGING_FACE_API_KEY')
@@ -112,7 +112,28 @@ def generate_blog():
         # Log the error for debugging
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 400  # Return error if something goes wrong
-
+# Route to handle blog summarization requests
+@app.route('/summarize', methods=['POST'])
+def summarize_blog():
+    try:
+        # Get the content from the request body
+        data = request.get_json()
+        content = data.get('content')
+        max_length = data.get('max_length', 250)  # Default to 150 words
+        min_length = data.get('min_length', 100)   # Default to 30 words
+        
+        if not content:
+            return jsonify({'error': 'Content is required'}), 400
+        
+        # Use the Hugging Face summarization pipeline
+        summary = summarizer(content, max_length=max_length, min_length=min_length, do_sample=False)
+        
+        # Return the summary
+        return jsonify({'summary': summary[0]['summary_text']})
+    
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': str(e)}), 400
 if __name__ == "__main__":
     # Enable debug mode for better error visibility
     app.run(debug=True, host="0.0.0.0", port=8501, threaded=True)
