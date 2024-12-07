@@ -8,7 +8,37 @@ const Editor = () => {
   const [content, setContent] = useState('');
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState('');
+  const [summary, setSummary] = useState("");
+  const [summaryError, setSummaryError] = useState("");
+  const [isSummarizing, setIsSummarizing] = useState(false);
   const navigate = useNavigate();
+  const handleSummarize = async () => {
+    if (!content) {
+      setSummaryError("Please input content to summarize.");
+      return;
+    }
+
+    setIsSummarizing(true);
+    setSummaryError("");
+
+    try {
+      const response = await axios.post("http://localhost:8501/summarize", {
+        content,
+        max_length: 250, // Maximum words for summary
+        min_length: 100,  // Minimum words for summary
+      });
+
+      if (response.data && response.data.summary) {
+        setSummary(response.data.summary); // Set summary state
+      } else {
+        setSummaryError("Failed to summarize content. Please try again.");
+      }
+    } catch (error) {
+      setSummaryError("Error connecting to summarization service.");
+    } finally {
+      setIsSummarizing(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -98,9 +128,38 @@ const Editor = () => {
 
         <button className="btn btn-dark add-btn mb-2" type="submit">Add</button>
       </form>
+      <div className="mt-4">
+        <button
+          className="btn btn-primary w-auto"
+          onClick={handleSummarize}
+          disabled={isSummarizing}
+        >
+          {isSummarizing ? "Summarizing..." : "Summarize"}
+        </button>
+
+        {summary && (
+          <div className="mt-3">
+            <h5>Summarized Content:</h5>
+            <textarea
+              className="form-control"
+              value={summary}
+              rows="6"
+              readOnly
+            ></textarea>
+          </div>
+        )}
+
+        {summaryError && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {summaryError}
+          </div>
+        )}
+      </div>
+
       {message && <p>{message}</p>}
     </div>
   );
 };
 
 export default Editor;
+
