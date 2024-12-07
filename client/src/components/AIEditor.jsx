@@ -317,7 +317,8 @@ const AIEditor = () => {
           </div>
 
           <button
-            className="btn btn-primary w-auto mt-4"
+            className="btn sum-btn w-auto mt-4"
+            style={{backgroundColor: '#4d718e', color:'#fff'}}
             onClick={handleSummarize}
             disabled={isSummarizing}
           >
