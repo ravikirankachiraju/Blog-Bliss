@@ -130,7 +130,7 @@ const Editor = () => {
       </form>
       <div className="mt-4">
         <button
-          className="btn btn-primary w-auto"
+          className="btn btn-primary edit-btn w-auto"
           onClick={handleSummarize}
           disabled={isSummarizing}
         >
