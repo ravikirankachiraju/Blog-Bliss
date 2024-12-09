@@ -126,10 +126,7 @@ const ProfilePage = () => {
           <FaUserEdit style={styles.icon} />
           <span>{isEditing ? "Update Profile" : "Edit Profile"}</span>
         </div>
-        <div className="sidebarItem" style={styles.sidebarItem}>
-          <FaKey style={styles.icon} />
-          <span>Change Password</span>
-        </div>
+  
       </div>
 
       {/* Profile Section */}
