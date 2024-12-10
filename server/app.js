@@ -525,7 +525,7 @@ app.put('/profile', fetchUser, upload.single('profilePic'), async (req, res) => 
 
 
 // Route to get the total number of comments for all posts by the logged-in user
-app.get('/api/user/comments', fetchUser, async (req, res) => {
+app.get('/user/comments', fetchUser, async (req, res) => {
     try {
         // Get the user ID from the verified token
         const userId = req.user.id; //  the fetchUser middleware adds the user to the request object
@@ -549,7 +549,7 @@ app.get('/api/user/comments', fetchUser, async (req, res) => {
 });
 // Route to count total number of posts done by user
 
-app.get('/api/user/posts', fetchUser, async (req, res) => {
+app.get('/user/posts', fetchUser, async (req, res) => {
     try {
         const userId = req.user.id;
         console.log(userId);
@@ -571,7 +571,7 @@ app.get('/api/user/posts', fetchUser, async (req, res) => {
 })
 
 // Route to get recent 5 comments across all posts
-app.get('/api/user/recent-comments', fetchUser, async (req, res) => {
+app.get('/user/recent-comments', fetchUser, async (req, res) => {
     try {
         const userId = req.user.id;
         console.log(userId);

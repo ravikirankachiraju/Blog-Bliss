@@ -38,9 +38,9 @@ function Dashboard() {
 
       try {
         const [commentsRes, postsRes, recentRes] = await Promise.all([
-          axios.get('http://localhost:3000/api/user/comments', { headers: { 'auth-token': token } }),
-          axios.get('http://localhost:3000/api/user/posts', { headers: { 'auth-token': token } }),
-          axios.get('http://localhost:3000/api/user/recent-comments', { headers: { 'auth-token': token } }),
+          axios.get('http://localhost:3000/user/comments', { headers: { 'auth-token': token } }),
+          axios.get('http://localhost:3000/user/posts', { headers: { 'auth-token': token } }),
+          axios.get('http://localhost:3000/user/recent-comments', { headers: { 'auth-token': token } }),
         ]);
 
         setTotalComments(commentsRes.data.totalComments);
