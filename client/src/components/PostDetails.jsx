@@ -11,8 +11,6 @@ const PostDetails = () => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [isLiked, setIsLiked] = useState();
-  const [likes, setLikes] = useState();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,8 +24,6 @@ const PostDetails = () => {
         // rendering the post using id
         const response = await axios.get(`http://localhost:3000/posts/${postId}`);
         setPost(response.data.post);
-        setLikes(response.data.post.likes)
-        setIsLiked(response.data.post.likedBy)
         setComments(response.data.post.comments || []);
       } catch (err) {
         toast.error('Failed to load post details');
@@ -114,28 +110,6 @@ const PostDetails = () => {
   };
 
 
-  // likes
-  const handleLike = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        toast.error('You must be logged in to like a post');
-      }
-
-      const response = await axios.post(`http://localhost:3000/posts/like/${postId}`,
-        {},
-        { headers: { 'auth-token': token } }
-      );
-
-      setLikes(response.data.likes); // Update likes count
-      setIsLiked(!isLiked); // Toggle like state
-    } catch (error) {
-      console.error('Error liking post:', error.response?.data?.message || error.message);
-      toast.error('Failed to like post');
-    }
-  };
-
-
   return (
     <div className="container mt-4">
       <Toaster />
@@ -191,24 +165,7 @@ const PostDetails = () => {
           <div className="mt-3 post-content">
             <p>{post.content}</p>
           </div>
-          {/* likes */}
-
-          <button
-            onClick={handleLike}
-            className="btn d-flex align-items-center gap-2 px-3 py-2 rounded-pill w-auto border transition"
-            aria-label={isLiked ? "Unlike" : "Like"}
-            id="like"
-          >
-            <ThumbsUp
-              className={`transition ${isLiked ? "text-secondary" :'text-primary'}`}
-              size={20}
-            />
-
-            <span className={`fw-medium ${isLiked ? "text-secondary" : "text-primary"}`}>
-              {likes}
-            </span>
-          </button>
-
+     
           {/* comments section */}
           <h4 className="mt-4">Comments</h4>
 
