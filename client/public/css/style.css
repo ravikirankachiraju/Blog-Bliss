@@ -402,3 +402,58 @@ footer{
       transform: rotate(-360deg);
     }
   }
+
+  /* Faqs */
+  
+.about-container {
+  font-size: 1.1rem !important;
+  margin-bottom: 6.5rem;
+  line-height: 1.6; 
+}
+
+
+.about-container h3 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #2c3e50; 
+}
+
+.about-container h5 {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  color: #34495e; 
+}
+
+
+.about-container p {
+  margin-bottom: 1rem;
+  color: #555; 
+}
+
+.about-container ul {
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+
+.about-container li {
+  margin-bottom: 0.5rem;
+  color: #444; 
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+  .about-container {
+      font-size: 1rem;
+      margin-bottom: 5rem;
+  }
+
+  .about-container h3 {
+      font-size: 1.5rem;
+  }
+
+  .about-container h5 {
+      font-size: 1.2rem;
+  }
+}

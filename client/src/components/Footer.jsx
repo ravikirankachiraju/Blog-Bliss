@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 const Footer = () => {
   return (
     <> 
@@ -16,7 +16,7 @@ const Footer = () => {
         <div>
           <h3>HELPFUL LINKS</h3>
           <ul className="links">
-            <li><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i> &nbsp; &nbsp;&nbsp;FAQs</a></li>
+            <li><Link to="/Faqs"><i class="fa fa-chevron-right" aria-hidden="true"></i> &nbsp; &nbsp;&nbsp;FAQs</Link></li>
             <li><a href="#"><i class="fa fa-chevron-right" aria-hidden="true"></i> &nbsp; &nbsp;&nbsp;How to use?</a></li>
             <li><a href="/feedback"><i class="fa fa-chevron-right" aria-hidden="true"></i> &nbsp; &nbsp;&nbsp;Feedback</a></li>
             <li><a href="/about"><i class="fa fa-chevron-right" aria-hidden="true"></i> &nbsp; &nbsp;&nbsp;About Us</a></li>
