@@ -219,7 +219,7 @@ const AIEditor = () => {
           </div>
 
           <div className="mb-3">
-            <label htmlFor="noWords" className="form-label">Word Count (Max: 1500 , Takes more time & needs high speed internet connection as word count is high)</label>
+            <label htmlFor="noWords" className="form-label">Word Count (Max: 1200 , Takes more time & needs high speed internet connection as word count is high)</label>
             <input
               type="number"
               className="form-control w-75"
