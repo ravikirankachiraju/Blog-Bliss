@@ -98,7 +98,7 @@ const Home = () => {
           ))
         ) : (
 
-          <div className="loader-container">
+          <div className="loader-container" style={{ marginLeft: 'auto', marginRight: 'auto', marginTop: '20px' }}>
             <div className="loader"></div>
           </div>
 
