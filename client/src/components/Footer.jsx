@@ -35,7 +35,7 @@ const Footer = () => {
           <h3>CONNECT WITH US</h3>
           <ul className="social">
             <li><a href="https://x.com/krk_sharma45?t=-ph7yg9pJsjFx35ZFa6QzA&s=09">X</a></li>
-            <li><a href="#">Instagram <i class="fab fa-instagram social-icon"></i></a></li>
+            <li><a href="https://www.instagram.com/harshath_gaini?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">Instagram <i class="fab fa-instagram social-icon"></i></a></li>
             <li><a href="#">LinkedIn <i class="fab fa-linkedin social-icon"></i></a></li>
             <li><a href="https://github.com/ravikirankachiraju">Github <i class="bi bi-github"></i></a></li>
           </ul>
