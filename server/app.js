@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from './models/User.js';
+import User from './Models/User.js';
 import Post from './Models/Post.js';
 import cors from 'cors';
 import multer from 'multer';
