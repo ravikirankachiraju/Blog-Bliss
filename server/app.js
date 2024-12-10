@@ -233,7 +233,7 @@ app.get('/posts/:postId', async (req, res) => {
 
         let originalImageUrl=post.image.url;
         // sending both the post and the originalImageUrl
-        res.json({ post, likes: post.likes, originalImageUrl, isLiked: post.isLiked });
+        res.json({ post, originalImageUrl,});
 
     } catch (error) {
         console.error('Error fetching post:', error);
@@ -396,48 +396,6 @@ app.delete('/posts/comments/:commentId', fetchUser, async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 });
-
-// Route to like/unlike a post
-app.post('/posts/like/:postId', fetchUser, async (req, res) => {
-    const { postId } = req.params;
-    const userId = req.user.id; // Logged-in user's ID
-    let isLiked = true; // Default value for like status
-
-    try {
-        const post = await Post.findById(postId);
-
-        if (!post) {
-            return res.status(404).json({ message: 'Post not found' });
-        }
-
-        // Check if the user has already liked the post
-        if (post.likedBy.includes(userId)) {
-            post.likes = Math.max(0, post.likes - 1); // Decrement likes if already liked
-            post.likedBy = post.likedBy.filter(id => id !== userId); // Remove userId from likedBy array
-            isLiked = false; // Set isLiked to false (since user is unliking the post)
-        } else {
-            // Add userId to likedBy array and increment likes count
-            post.likedBy.push(userId);
-            post.likes += 1;
-            console.log('Before update:', post.likedBy);
-            console.log('Like response:', { likes: post.likes, isliked: isLiked });
-
-
-        }
-
-        // Save the updated post
-        await post.save({ timestamps: false });
-
-        // Send the updated likes count and isLiked status to the frontend
-        res.status(200).json({ likes: post.likes, isliked: isLiked });
-    } catch (error) {
-        console.error('Error updating likes:', error);
-        res.status(500).json({ message: 'Error updating likes', error: error.message });
-    }
-});
-        
-       
-
 
 // profile
 
