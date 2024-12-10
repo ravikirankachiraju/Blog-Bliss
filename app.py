@@ -83,6 +83,7 @@ def generate_blog():
         if 'input_text_field' not in data or 'no_words' not in data or 'blog_style' not in data:
             return jsonify({'error': "Missing required fields: 'input_text_field', 'no_words', 'blog_style'"}), 400
         
+        #Extracts values from the JSON data
         input_text_field = data['input_text_field']
         no_words = data['no_words']
         blog_style = data['blog_style']
