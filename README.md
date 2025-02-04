@@ -1,4 +1,4 @@
-Project Title:  Enhancing Blog Content Creation with AI-Powered Text Generation
+Project Title :  Enhancing Blog Content Creation with AI-Powered Text Generation
 
 Objective:  The objective of this project is to develop an AI-powered blog platform that assists users in creating, reading, updating, and 
 deleting blog posts, as well as generating and summarizing content using advanced natural language processing (NLP) models.
